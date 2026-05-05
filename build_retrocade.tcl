@@ -50,13 +50,13 @@ set_option -output_base_name a2600nano_retrocade
 set_option -verilog_std sysv2017
 set_option -vhdl_std vhd2008
 set_option -top_module A2600_top
-# CRITICAL: Keep MSPI/SSPI dedicated to SPI flash (do NOT use as GPIO)
-# Using these as GPIO breaks bootloader SPI flash access
-set_option -use_mspi_as_gpio 0
-set_option -use_sspi_as_gpio 0
-# SAFE: READY and DONE can be used as GPIO without breaking bootloader
-set_option -use_ready_as_gpio 1
-set_option -use_done_as_gpio 1
+# CRITICAL FINDING (May 4, 2026): MSPI was the actual problem, not SSPI!
+# MSPI = Master SPI (flash interface) - bootloader needs this DEDICATED
+# SSPI = Slave SPI - can be used as GPIO safely
+set_option -use_mspi_as_gpio 0   # MUST be 0 - bootloader needs MSPI for flash access
+set_option -use_sspi_as_gpio 1   # SAFE to use as GPIO (matches working GUI config)
+set_option -use_ready_as_gpio 0  # Keep disabled (matches working GUI config)
+set_option -use_done_as_gpio 0   # Keep disabled (matches working GUI config)
 set_option -print_all_synthesis_warning 1
 set_option -rw_check_on_ram 0
 set_option -user_code 00000001
