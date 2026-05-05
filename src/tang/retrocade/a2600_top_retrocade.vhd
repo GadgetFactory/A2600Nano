@@ -42,6 +42,10 @@ entity A2600_top is
     sd_clk      : out std_logic;
     sd_cmd      : inout std_logic;
     sd_dat      : inout std_logic_vector(3 downto 0);
+    -- pmod interface
+    pmod_ioa    : inout std_logic_vector(3 downto 0);
+    pmod_iob    : inout std_logic_vector(3 downto 0);
+    -- ws2812 rgb led
     ws2812      : out std_logic
     );
 end;
