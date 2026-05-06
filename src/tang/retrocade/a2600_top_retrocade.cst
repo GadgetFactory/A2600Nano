@@ -195,49 +195,17 @@ IO_PORT "m0s[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
 IO_LOC "m0s[0]" J11; // MOSI
 IO_PORT "m0s[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
 
-// Papilio Retrocade - PMOD Connector (Type 1A GPIO)
-// Verified against Retrocade schematic - all pins correct
-// COMMENTED OUT: Not used by A2600 core (uncomment if needed for other cores)
-// Top Row
-//IO_LOC "pmod_ioa[0]" N9;
-//IO_PORT "pmod_ioa[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_ioa[1]" R9;
-//IO_PORT "pmod_ioa[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_ioa[2]" N8;
-//IO_PORT "pmod_ioa[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_ioa[3]" L9;
-//IO_PORT "pmod_ioa[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-// Bottom Row
-//IO_LOC "pmod_iob[0]" L8;
-//IO_PORT "pmod_iob[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_iob[1]" M6;
-//IO_PORT "pmod_iob[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_iob[2]" P7;
-//IO_PORT "pmod_iob[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "pmod_iob[3]" R7;
-//IO_PORT "pmod_iob[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-
-// digital retro Joystick
-// PMOD 3
-// 0 TR B11
-// 1 DN A11
-// 2 UP D11
-// 3 RI N6
-// 4 LE N7
-// 5 TR2 N8
-
-//IO_LOC "io[5]" N8;
-//IO_PORT "io[5]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "io[4]" N7;
-//IO_PORT "io[4]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "io[3]" N6;
-//IO_PORT "io[3]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "io[2]" D11;
-//IO_PORT "io[2]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "io[1]" A11;
-//IO_PORT "io[1]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
-//IO_LOC "io[0]" B11;
-//IO_PORT "io[0]" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+// Papilio Retrocade - PMOD DualShock Controller (Sipeed Joystick to DIP adapter)
+// Sipeed adapter pinout: 1=sclk, 2=mosi, 3=miso, 4=csn, 5=3v3, 6=gnd
+// PMOD Type 1B connector (bottom row, pins 7-10)
+IO_LOC "pmod_ds_clk" L8;   // Pin 7/IOB0 - SPI Clock (out)
+IO_PORT "pmod_ds_clk" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "pmod_ds_mosi" M6;  // Pin 8/IOB1 - SPI MOSI (out)
+IO_PORT "pmod_ds_mosi" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
+IO_LOC "pmod_ds_miso" P7;  // Pin 9/IOB2 - SPI MISO (in)
+IO_PORT "pmod_ds_miso" IO_TYPE=LVCMOS33 PULL_MODE=UP BANK_VCCIO=3.3;
+IO_LOC "pmod_ds_cs" R7;    // Pin 10/IOB3 - SPI Chip Select (out)
+IO_PORT "pmod_ds_cs" IO_TYPE=LVCMOS33 PULL_MODE=UP DRIVE=8 BANK_VCCIO=3.3;
 
 // Clock
 IO_LOC "clk_27mhz" H11;

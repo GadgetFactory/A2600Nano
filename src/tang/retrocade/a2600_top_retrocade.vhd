@@ -42,9 +42,12 @@ entity A2600_top is
     sd_clk      : out std_logic;
     sd_cmd      : inout std_logic;
     sd_dat      : inout std_logic_vector(3 downto 0);
-    -- pmod interface (commented out - not used by A2600 core)
-    -- pmod_ioa    : inout std_logic_vector(3 downto 0);
-    -- pmod_iob    : inout std_logic_vector(3 downto 0);
+    -- pmod interface - DualShock Controller via Sipeed Joystick to DIP adapter
+    -- Pin mapping: 1=sclk, 2=mosi, 3=miso, 4=csn, 5=3v3, 6=gnd
+    pmod_ds_clk  : out std_logic;
+    pmod_ds_mosi : out std_logic;
+    pmod_ds_miso : in std_logic;
+    pmod_ds_cs   : out std_logic;
     -- ws2812 rgb led
     ws2812      : out std_logic
     );
@@ -71,7 +74,7 @@ signal joyUsb1      : std_logic_vector(15 downto 0);
 signal joyUsb2      : std_logic_vector(15 downto 0);
 signal joyUsb1A     : std_logic_vector(15 downto 0);
 signal joyUsb2A     : std_logic_vector(15 downto 0);
-signal joyDigital   : std_logic_vector(15 downto 0);
+signal joyDigital   : std_logic_vector(15 downto 0) := x"0000";
 signal joyNumpad    : std_logic_vector(15 downto 0);
 signal joyMouse     : std_logic_vector(15 downto 0);
 signal numpad       : std_logic_vector(7 downto 0);
@@ -274,7 +277,6 @@ signal ds2_cs          : std_logic;
 signal ds2_clk         : std_logic;
 signal ds2_mosi        : std_logic;
 signal ds2_miso        : std_logic := '0';
-signal io              : std_logic_vector(5 downto 0) := "111111";
 signal btn_select       : std_logic; 
 signal btn_start        : std_logic;
 signal btn_b_w          : std_logic;
@@ -341,6 +343,12 @@ port (
 end component;
 
 begin
+  -- Wire PMOD to DualShock controller (Player 1)
+  pmod_ds_clk  <= ds_clk;
+  pmod_ds_mosi <= ds_mosi;
+  ds_miso      <= pmod_ds_miso;
+  pmod_ds_cs   <= ds_cs;
+  
   spi_io_din  <= m0s(1);
   spi_io_ss   <= m0s(2);
   spi_io_clk  <= m0s(3);
@@ -679,7 +687,8 @@ joyDS2A_p1 <= key_rstick & key_lstick & key_r2 & key_l2 & key_start & key_select
               key_square & key_triangle & "00" & "0000";
 joyDS2A_p2 <= key_rstick2 & key_lstick2 & key_r22 & key_l22 & key_start2 & key_select2 & key_r12 & key_l12 &
               key_square2 & key_triangle2 & "00" & "0000";
-joyDigital <= not(x"FF" & "11" & io(5) & io(0) & io(2) & io(1) & io(4) & io(3));
+-- joyDigital not used on Retrocade (no D9 joystick port) - initialized to x"0000"
+-- joyDigital <= not(x"FF" & "11" & io(5) & io(0) & io(2) & io(1) & io(4) & io(3));
 -- Logitech Rumble Pad 2
 joyUsb1    <= "0000" &
               extra_button0(5) & -- BTN_START
@@ -728,8 +737,8 @@ joyUsb2A   <= "0000" &
 joyNumpad  <= x"00" & "00" & numpad(5) & numpad(4) & numpad(3) & numpad(2) & numpad(1) & numpad(0);
 joyMouse   <= extra_button0 & mouse_btns & "00" & "0000";
 
--- send external DB9 joystick port to µC
-db9_joy <= not('1' & io(0) & io(1) & io(2) & io(3) & io(4));
+-- Retrocade has no external DB9 joystick port - set to inactive state
+db9_joy <= "111111";
 
 process(clk)
 begin
